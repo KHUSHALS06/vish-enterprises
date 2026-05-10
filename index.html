@@ -2,975 +2,1610 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>VishEnterprises</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VishEnterprises — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg:        #0a0f14;
+  --surface:   #111820;
+  --surface2:  #161f28;
+  --border:    rgba(79,195,200,0.15);
+  --accent:    #4fc3c8;
+  --accent2:   #46aaff;
+  --text:      #e8f0f2;
+  --muted:     rgba(232,240,242,0.45);
+  --danger:    #ff6b6b;
+  --success:   #4fc3c8;
+  --warn:      #ffc86b;
+  --radius:    14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #f5efe6;
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* NAVBAR */
-.navbar {
-    margin: 20px 30px 30px;
-    padding: 15px 30px;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, rgba(70, 170, 255, 0.65), rgba(80, 210, 190, 0.55));
-    backdrop-filter: blur(14px);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.35);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* ── LOGIN SCREEN ─────────────────────────────────────── */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(70,170,255,0.08), transparent 55%),
+    radial-gradient(ellipse at 80% 50%, rgba(79,195,200,0.07), transparent 55%),
+    var(--bg);
 }
 
-.navbar::before {
-    content: "";
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 65%);
-    top: var(--y, 50%);
-    left: var(--x, 50%);
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: 0.2s;
-}
-.navbar:hover::before { opacity: 1; }
-
-.logo { font-size: 24px; font-weight: 600; color: #003b44; }
-
-.nav-links { display: flex; gap: 30px; }
-.nav-links a {
-    text-decoration: none;
-    color: #003b44;
-    padding: 8px 16px;
-    position: relative;
-}
-.nav-links a::after {
-    content: "";
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    background: #003b44;
-    bottom: 0; left: 0;
-    transition: 0.3s;
-}
-.nav-links a:hover::after { width: 100%; }
-
-.search-box {
-    display: flex;
-    background: rgba(255,255,255,0.4);
-    padding: 6px 10px;
-    border-radius: 15px;
-}
-.search-box input { border: none; outline: none; background: transparent; }
-.search-box button {
-    border: none;
-    background: #4fc3c8;
-    color: #003b44;
-    padding: 6px 12px;
-    border-radius: 10px;
-    cursor: pointer;
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 48px 44px;
+  width: 380px;
+  text-align: center;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
 }
 
-/* MAIN */
-.main-section { display: flex; gap: 20px; margin: 20px 30px; }
-
-/* VIDEO SECTION */
-.video-section {
-    position: relative;
-    width: 65%;
-    height: 480px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.35);
-    background: linear-gradient(135deg, rgba(70, 170, 255, 0.65), rgba(80, 210, 190, 0.55));
-    backdrop-filter: blur(14px);
-}
-.bg-video {
-    position: absolute;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    z-index: 1;
-}
-.video-section::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.35);
-    z-index: 2;
-}
-.video-content {
-    position: absolute;
-    z-index: 3;
-    top: 50%;
-    left: 40px;
-    transform: translateY(-50%);
-}
-.video-content h1 {
-    font-size: 64px;
-    font-weight: 800;
-    color: #ffffff;
-    line-height: 1.2;
-    max-width: 80%;
-    -webkit-text-stroke: 1px rgba(0,0,0,0.8);
-    text-shadow: 0 5px 20px rgba(0,0,0,0.7);
+.login-logo {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
 }
 
-/* SIDE BOX */
-.side-box {
-    width: 32%;
-    height: 440px;
-    background: linear-gradient(135deg, rgba(70, 170, 255, 0.65), rgba(80, 210, 190, 0.55));
-    backdrop-filter: blur(14px);
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(255,255,255,0.35);
-    display: flex;
-    flex-direction: column;
-}
-.side-box h2 { margin: 0 0 10px; color: #003b44; }
+.login-sub { font-size: 12px; color: var(--muted); margin-bottom: 36px; letter-spacing: 0.5px; }
 
-.drum-wrapper {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    border-radius: 12px;
+.login-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 14px;
+  letter-spacing: 2px;
+  transition: border-color 0.2s;
 }
-.drum-wrapper::before,
-.drum-wrapper::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0;
-    height: 70px;
-    z-index: 10;
-    pointer-events: none;
-}
-.drum-wrapper::before {
-    top: 0;
-    background: linear-gradient(to bottom, rgba(70,170,255,0.85), transparent);
-}
-.drum-wrapper::after {
-    bottom: 0;
-    background: linear-gradient(to top, rgba(80,210,190,0.85), transparent);
-}
+.login-input:focus { border-color: var(--accent); }
 
-.scroll-capture {
-    position: absolute;
-    inset: 0;
-    overflow-y: scroll;
-    z-index: 20;
-    opacity: 0;
-    cursor: grab;
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
 }
-.scroll-capture:active { cursor: grabbing; }
-.scroll-spacer { height: 2000px; }
+.login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-.drum-stage {
-    position: absolute;
-    inset: 0;
-    perspective: 500px;
-    perspective-origin: 50% 50%;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.login-error {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--danger);
+  display: none;
 }
 
-.card {
-    position: absolute;
-    left: 4px; right: 4px;
-    height: 280px;
-    border-radius: 15px;
-    overflow: hidden;
-    cursor: pointer;
-    transform-origin: center center;
-    transform-style: preserve-3d;
-    transition: height 0.45s cubic-bezier(0.34,1.56,0.64,1);
-    pointer-events: all;
-    will-change: transform, filter;
+/* ── MAIN APP ─────────────────────────────────────────── */
+#app { display: none; flex: 1; }
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 230px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0;
+  z-index: 100;
 }
-.card.card-active { height: 340px; }
-.card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
-.card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.1));
-    z-index: 1;
+
+.sidebar-logo {
+  padding: 0 24px 28px;
+  font-size: 16px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
 }
-.card-content {
-    position: absolute;
-    inset: 0;
-    padding: 15px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    color: #fff;
+.sidebar-logo small { display: block; font-size: 10px; color: var(--muted); -webkit-text-fill-color: var(--muted); font-weight: 500; letter-spacing: 1px; margin-top: 2px; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  margin: 2px 0;
 }
-.card-content h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
-.card-content p {
-    margin: 0;
-    font-size: 11px;
-    line-height: 1.4;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    pointer-events: none;
+.nav-item:hover { color: var(--text); background: rgba(79,195,200,0.06); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(79,195,200,0.08); }
+.nav-item svg { flex-shrink: 0; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: #000;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  display: none;
 }
-.card:hover img { transform: scale(1.08); }
-.card:hover p  { opacity: 1; transform: translateY(0); }
+.nav-badge.show { display: block; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 20px 24px 0;
+  border-top: 1px solid var(--border);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 10px 0;
+  transition: color 0.2s;
+}
+.logout-btn:hover { color: var(--danger); }
+
+/* Main content */
+.main {
+  margin-left: 230px;
+  padding: 36px 40px;
+  min-height: 100vh;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* Page header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.page-title { font-size: 24px; font-weight: 800; }
+.page-sub   { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+}
+
+.stat-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.stat-value { font-size: 32px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+.stat-value.accent  { color: var(--accent); }
+.stat-value.accent2 { color: var(--accent2); }
+.stat-value.warn    { color: var(--warn); }
+.stat-value.danger  { color: var(--danger); }
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(79,195,200,0.08);
+}
+
+.search-input {
+  margin-left: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  outline: none;
+  width: 220px;
+  transition: border-color 0.2s;
+}
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: var(--muted); }
+
+/* Primary button */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* Table */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(79,195,200,0.04); }
+
+tbody td {
+  padding: 14px 18px;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.td-name    { font-weight: 600; }
+.td-email   { color: var(--accent); font-size: 12px; }
+.td-phone   { color: var(--muted); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+.td-product { font-size: 12px; color: var(--muted); }
+.td-msg     { font-size: 12px; color: var(--muted); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.td-date    { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.badge-new     { background: rgba(79,195,200,0.18); color: var(--accent); border: 1px solid rgba(79,195,200,0.3); }
+.badge-read    { background: rgba(255,200,107,0.15); color: var(--warn);   border: 1px solid rgba(255,200,107,0.3); }
+.badge-replied { background: rgba(79,195,200,0.08); color: var(--muted);  border: 1px solid var(--border); }
+.badge-contact { background: rgba(70,170,255,0.15); color: var(--accent2); border: 1px solid rgba(70,170,255,0.3); }
+.badge-quote   { background: rgba(79,195,200,0.15); color: var(--accent);  border: 1px solid rgba(79,195,200,0.3); }
+.badge-active  { background: rgba(79,195,200,0.15); color: var(--accent);  border: 1px solid rgba(79,195,200,0.3); }
+.badge-hidden  { background: rgba(255,107,107,0.12); color: var(--danger);  border: 1px solid rgba(255,107,107,0.25); }
+
+/* Row actions */
+.row-actions { display: flex; align-items: center; gap: 6px; }
+
+.icon-btn {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(79,195,200,0.1); }
+.icon-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: rgba(255,107,107,0.1); }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-state svg { margin-bottom: 16px; opacity: 0.3; }
+.empty-state p { font-size: 14px; }
+
+/* Product cards grid */
+.prod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.prod-admin-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.prod-admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.prod-admin-img {
+  height: 160px;
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+}
+.prod-admin-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+.prod-admin-card:hover .prod-admin-img img { transform: scale(1.05); }
+.prod-admin-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.prod-admin-body { padding: 18px; }
+.prod-admin-tag  {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.prod-admin-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.prod-admin-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+
+.prod-admin-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.25s;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-close {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { color: var(--danger); border-color: var(--danger); }
+
+.form-row-modal { display: flex; gap: 14px; }
+
+.form-group-modal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+.form-group-modal.full { flex: unset; width: 100%; }
+
+.form-label-modal {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.form-input-modal {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.form-input-modal:focus { border-color: var(--accent); }
+.form-input-modal::placeholder { color: var(--muted); }
+
+textarea.form-input-modal { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+/* ── IMAGE UPLOAD ZONE ─────────────────────────────────── */
+.img-upload-zone {
+  width: 100%;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  background: var(--surface2);
+}
+.img-upload-zone:hover { border-color: var(--accent); background: rgba(79,195,200,0.04); }
+.img-upload-zone.drag-over { border-color: var(--accent); background: rgba(79,195,200,0.08); }
+.img-upload-zone.has-image { border-style: solid; border-color: rgba(79,195,200,0.4); }
+
+.img-upload-input { display: none; }
+
+.img-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 30px 20px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.img-upload-placeholder svg { opacity: 0.5; }
+.img-upload-placeholder span { font-size: 12px; font-weight: 500; text-align: center; line-height: 1.5; }
+.img-upload-placeholder small { font-size: 10px; opacity: 0.6; }
+
+.img-preview-wrap {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.img-preview-wrap.show { display: block; }
+.img-preview {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.img-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.img-upload-zone:hover .img-preview-overlay { opacity: 1; }
+
+.img-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s;
+}
+.img-action-btn:hover { transform: scale(1.05); }
+.img-action-btn.change { background: rgba(79,195,200,0.9); color: #000; }
+.img-action-btn.remove { background: rgba(255,107,107,0.9); color: #fff; }
+
+.img-filename-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0,0,0,0.7);
+  color: var(--muted);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 3px 8px;
+  border-radius: 6px;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.img-upload-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Upload progress bar */
+.upload-progress {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--border);
+  display: none;
+}
+.upload-progress.show { display: block; }
+.upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Also keep the filename field below for manual entry */
+.img-filename-manual {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.img-filename-manual input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+  margin-top: 4px;
+}
+.img-filename-manual input:focus { border-color: var(--accent); }
+
+/* Divider for image section */
+.img-or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.img-or-divider::before,
+.img-or-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.specs-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+.spec-row { display: flex; gap: 8px; align-items: center; }
+.spec-row input { flex: 1; }
+.spec-remove {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--danger);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.spec-add {
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-align: left;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-cancel:hover { color: var(--text); border-color: var(--text); }
+
+/* Submission detail modal */
+.detail-row {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-key   { width: 110px; flex-shrink: 0; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding-top: 1px; }
+.detail-value { flex: 1; color: var(--text); line-height: 1.6; word-break: break-word; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--text);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 9999;
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+/* Loading spinner */
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-row td {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+}
 </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar" id="navbar">
-    <div class="logo">VishEnterprises</div>
-    <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#products">Products</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#contact">Contact</a>
-    </div>
-    <div class="search-box">
-        <input type="text" placeholder="Search...">
-        <button>Go</button>
-    </div>
+<!-- ═══ LOGIN SCREEN ══════════════════════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">VishEnterprises</div>
+    <div class="login-sub">ADMIN PORTAL</div>
+    <input class="login-input" type="password" id="loginKey" placeholder="Enter admin key" autocomplete="off">
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-error" id="loginError">Incorrect admin key. Try again.</div>
+  </div>
 </div>
 
-<!-- MAIN -->
-<div class="main-section">
-    <div class="video-section">
-        <video autoplay muted loop playsinline class="bg-video">
-            <source src="img/pharma_machines_cool_animation.mp4" type="video/mp4">
-        </video>
-        <div class="video-content">
-            <h1>End to End Solution for Processing to Packaging</h1>
-        </div>
+<!-- ═══ MAIN APP ═══════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">VishEnterprises <small>ADMIN</small></div>
+
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+      Dashboard
     </div>
 
-    <div class="side-box">
-        <h2>Our Solutions</h2>
-        <div class="drum-wrapper" id="drumWrapper">
-            <div class="scroll-capture" id="scrollCapture">
-                <div class="scroll-spacer"></div>
-            </div>
-            <div class="drum-stage" id="drumStage">
-                <!-- Cards are injected by JS from the backend -->
-            </div>
-        </div>
+    <div class="nav-item" onclick="showPage('submissions')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Submissions
+      <span class="nav-badge" id="newBadge">0</span>
     </div>
+
+    <div class="nav-item" onclick="showPage('products')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" stroke="currentColor" stroke-width="1.8"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Products
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="logout-btn" onclick="doLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Logout
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Overview of all activity</div>
+        </div>
+        <button class="btn-primary" onclick="refreshAll()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Submissions</div>
+          <div class="stat-value accent2" id="stat-total">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">New (Unread)</div>
+          <div class="stat-value accent" id="stat-new">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Quote Requests</div>
+          <div class="stat-value warn" id="stat-quotes">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Products</div>
+          <div class="stat-value" id="stat-products">—</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px; font-weight:700; margin-bottom:14px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;">Recent Submissions</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Type</th><th>Product</th><th>Status</th><th>Date</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="dashboard-tbody">
+            <tr class="loading-row"><td colspan="6"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── SUBMISSIONS ── -->
+    <div class="page" id="page-submissions">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Submissions</div>
+          <div class="page-sub">All contact and quote requests</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="filter-btn active" onclick="filterSubs('all', this)">All</button>
+        <button class="filter-btn" onclick="filterSubs('contact', this)">Contact</button>
+        <button class="filter-btn" onclick="filterSubs('quote', this)">Quotes</button>
+        <button class="filter-btn" onclick="filterSubs('new', this)">New</button>
+        <input class="search-input" type="text" placeholder="Search by name or email..." oninput="searchSubs(this.value)">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Email</th><th>Phone</th><th>Type</th><th>Product</th><th>Status</th><th>Date</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="subs-tbody">
+            <tr class="loading-row"><td colspan="8"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PRODUCTS ── -->
+    <div class="page" id="page-products">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Products</div>
+          <div class="page-sub">Manage what appears on your website</div>
+        </div>
+        <button class="btn-primary" onclick="openAddProduct()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+          Add Product
+        </button>
+      </div>
+      <div class="prod-grid" id="prod-grid">
+        <div style="color:var(--muted); font-size:13px; padding:20px; display:flex; align-items:center; gap:10px;"><span class="spinner"></span> Loading products…</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══ SUBMISSION DETAIL MODAL ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="subModal">
+  <div class="modal">
+    <div class="modal-title">
+      Submission Detail
+      <button class="modal-close" onclick="closeModal('subModal')">✕</button>
+    </div>
+    <div id="subModalContent"></div>
+    <div class="modal-actions" style="margin-top:24px;">
+      <button class="btn-cancel" onclick="closeModal('subModal')">Close</button>
+      <button class="btn-primary" id="subMarkReadBtn"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD / EDIT PRODUCT MODAL ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="prodModal">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="prodModalTitle">Add Product</span>
+      <button class="modal-close" onclick="closeModal('prodModal')">✕</button>
+    </div>
+
+    <input type="hidden" id="pm-id">
+
+    <div class="form-row-modal">
+      <div class="form-group-modal">
+        <label class="form-label-modal">Product Name *</label>
+        <input class="form-input-modal" id="pm-name" placeholder="e.g. Liquid Filling Machine">
+      </div>
+      <div class="form-group-modal">
+        <label class="form-label-modal">Tag</label>
+        <input class="form-input-modal" id="pm-tag" placeholder="e.g. Filling">
+      </div>
+    </div>
+
+    <div class="form-group-modal full">
+      <label class="form-label-modal">Description</label>
+      <textarea class="form-input-modal" id="pm-desc" placeholder="Describe the machine..."></textarea>
+    </div>
+
+    <!-- ── IMAGE UPLOAD ──────────────────────────────── -->
+    <div class="form-group-modal full">
+      <label class="form-label-modal">Product Image</label>
+
+      <!-- Drop zone -->
+      <div class="img-upload-zone" id="imgDropZone"
+           onclick="document.getElementById('pm-img-file').click()"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event)">
+
+        <input type="file" id="pm-img-file" class="img-upload-input"
+               accept="image/jpeg,image/png,image/webp,image/gif"
+               onchange="handleFileSelect(event)">
+
+        <!-- Placeholder shown when no image -->
+        <div class="img-upload-placeholder" id="imgPlaceholder">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Click to upload or drag & drop image here</span>
+          <small>JPG, PNG, WEBP · Max 5MB</small>
+        </div>
+
+        <!-- Preview shown when image selected -->
+        <div class="img-preview-wrap" id="imgPreviewWrap">
+          <img class="img-preview" id="imgPreview" src="" alt="Preview">
+          <div class="img-preview-overlay">
+            <button class="img-action-btn change" onclick="event.stopPropagation(); document.getElementById('pm-img-file').click()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Change
+            </button>
+            <button class="img-action-btn remove" onclick="event.stopPropagation(); clearImage()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Remove
+            </button>
+          </div>
+          <div class="img-filename-tag" id="imgFilenameTag"></div>
+        </div>
+
+        <!-- Upload progress -->
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        </div>
+      </div>
+
+      <div class="img-upload-hint">Image will be uploaded to your server's <code style="color:var(--accent); font-size:10px;">img/</code> folder</div>
+
+      <!-- Divider -->
+      <div class="img-or-divider">OR USE EXISTING FILENAME</div>
+
+      <!-- Manual filename fallback -->
+      <div class="img-filename-manual">
+        <span>Already have a file in the <code style="color:var(--accent);">img/</code> folder? Enter its name:</span>
+        <input id="pm-image" placeholder="e.g. liquid_filling_machine.jpg" oninput="handleManualFilename(this.value)">
+      </div>
+    </div>
+    <!-- ────────────────────────────────────────────── -->
+
+    <div class="form-group-modal full">
+      <label class="form-label-modal">Specs</label>
+      <div class="specs-input-wrap" id="specs-wrap"></div>
+      <button class="spec-add" onclick="addSpecRow()">+ Add spec</button>
+    </div>
+
+    <div class="form-group-modal full">
+      <label class="form-label-modal">Display Order</label>
+      <input class="form-input-modal" type="number" id="pm-order" placeholder="1" value="1">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('prodModal')">Cancel</button>
+      <button class="btn-primary" id="saveProductBtn" onclick="saveProduct()">
+        <span id="saveBtnText">Save Product</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ════════════════════════════════════════════════════════════════ -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg">Done!</span>
 </div>
 
 <script>
-// Navbar spotlight
-const navbar = document.getElementById("navbar");
-navbar.addEventListener("mousemove", (e) => {
-    const rect = navbar.getBoundingClientRect();
-    navbar.style.setProperty("--x", (e.clientX - rect.left) + "px");
-    navbar.style.setProperty("--y", (e.clientY - rect.top) + "px");
+// ─── Config ──────────────────────────────────────────────────────────────────
+const API = "";
+let ADMIN_KEY = "";
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let allSubmissions = [];
+let subFilter = "all";
+let subSearch  = "";
+let editingProductId = null;
+let selectedImageFile = null;   // holds the File object chosen for upload
+let selectedImageBase64 = null; // fallback: base64 if server upload not available
+
+// ─── Login ───────────────────────────────────────────────────────────────────
+function doLogin() {
+  const key = document.getElementById("loginKey").value.trim();
+  if (!key) return;
+  ADMIN_KEY = key;
+  fetch(`${API}/api/admin/submissions?limit=1`, {
+    headers: { "x-admin-key": ADMIN_KEY }
+  }).then(r => {
+    if (r.ok) {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      loadAll();
+    } else {
+      document.getElementById("loginError").style.display = "block";
+      ADMIN_KEY = "";
+    }
+  }).catch(() => {
+    document.getElementById("loginError").style.display = "block";
+    document.getElementById("loginError").textContent = "Cannot reach server. Is it running?";
+  });
+}
+
+document.getElementById("loginKey").addEventListener("keydown", e => {
+  if (e.key === "Enter") doLogin();
 });
 
-// ── Drum carousel (works with dynamic cards) ──────────────────────────────────
-const scrollEl  = document.getElementById("scrollCapture");
-const drumStage = document.getElementById("drumStage");
-
-let cards = [];
-const DRUM_RADIUS  = 320;
-let drumAngle   = 0;
-let targetAngle = 0;
-let raf = null;
-
-function renderDrum(angle) {
-    const N = cards.length;
-    if (!N) return;
-    const DEG_PER_CARD = 360 / N;
-    cards.forEach((card, i) => {
-        const slotAngle = i * DEG_PER_CARD - angle;
-        const rad = slotAngle * Math.PI / 180;
-        const translateY = DRUM_RADIUS * Math.sin(rad);
-        const rotateX    = -slotAngle;
-        const translateZ = DRUM_RADIUS * Math.cos(rad) - DRUM_RADIUS;
-        const cosVal     = Math.cos(rad);
-        const brightness = Math.max(0.22, cosVal);
-        const scale      = Math.max(0.68, 0.68 + 0.32 * cosVal);
-        const norm       = ((slotAngle % 360) + 360) % 360;
-        const onFront    = norm < 100 || norm > 260;
-
-        card.style.visibility = onFront ? "visible" : "hidden";
-        card.style.transform  = `translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) scale(${scale})`;
-        card.style.filter     = `brightness(${brightness})`;
-        card.style.zIndex     = Math.round(cosVal * 10 + 10);
-
-        const isFront = cosVal > 0.82;
-        card.classList.toggle("card-active", isFront);
-        const p = card.querySelector("p");
-        if (p) {
-            if (isFront) { const t = Math.min(1, (cosVal - 0.82) / 0.18); p.style.opacity = t; p.style.transform = "translateY(0px)"; }
-            else         { p.style.opacity = "0"; p.style.transform = "translateY(10px)"; }
-        }
-    });
+function doLogout() {
+  ADMIN_KEY = "";
+  document.getElementById("loginKey").value = "";
+  document.getElementById("loginError").style.display = "none";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("loginScreen").style.display = "flex";
 }
 
-function lerp(a, b, t) { return a + (b - a) * t; }
-
-function tick() {
-    drumAngle = lerp(drumAngle, targetAngle, 0.055);
-    renderDrum(drumAngle);
-    if (Math.abs(drumAngle - targetAngle) > 0.05) raf = requestAnimationFrame(tick);
-    else raf = null;
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.getElementById(`page-${name}`).classList.add("active");
+  event.currentTarget.classList.add("active");
+  if (name === "submissions") loadSubmissions();
+  if (name === "products")    loadProducts();
+  if (name === "dashboard")   loadDashboard();
 }
 
-function startTick() { if (!raf) raf = requestAnimationFrame(tick); }
-
-const SCROLL_MID = 10000;
-scrollEl.querySelector(".scroll-spacer").style.height = (SCROLL_MID * 2) + "px";
-scrollEl.scrollTop = SCROLL_MID;
-let lastScroll = scrollEl.scrollTop;
-
-scrollEl.addEventListener("scroll", () => {
-    const delta = scrollEl.scrollTop - lastScroll;
-    lastScroll  = scrollEl.scrollTop;
-    if (scrollEl.scrollTop < 2000 || scrollEl.scrollTop > SCROLL_MID * 2 - 2000) {
-        scrollEl.scrollTop = SCROLL_MID;
-        lastScroll = SCROLL_MID;
-    }
-    const N = cards.length || 5;
-    targetAngle += delta * ((360 / N) / 320);
-    startTick();
-});
-
-document.getElementById("drumWrapper").addEventListener("wheel", (e) => {
-    e.preventDefault();
-    scrollEl.scrollTop += e.deltaY * 0.4;
-}, { passive: false });
-
-// Load products from backend and build drum cards
-async function loadDrumProducts() {
-    try {
-        const res = await fetch("/api/products");
-        const products = await res.json();
-        drumStage.innerHTML = "";
-        products.forEach((p, i) => {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.id = `card${i}`;
-            card.innerHTML = `
-                <img src="img/${p.image||''}" alt="${p.name}" onerror="this.src='img/placeholder.jpg'">
-                <div class="card-content">
-                    <h3>${p.name}</h3>
-                    <p>${p.description||''}</p>
-                </div>`;
-            drumStage.appendChild(card);
-        });
-        cards = Array.from(drumStage.querySelectorAll(".card"));
-        renderDrum(0);
-    } catch {
-        // fallback: use static cards if backend unreachable
-        drumStage.innerHTML = `
-            <div class="card" id="card0"><img src="img/liquid_filling_machine.jpg" alt="Liquid Filling"><div class="card-content"><h3>Liquid Filling</h3><p>Precision filling systems for industrial liquids.</p></div></div>
-            <div class="card" id="card1"><img src="img/tube_filling_machine.jpg" alt="Tube Filling"><div class="card-content"><h3>Tube Filling</h3><p>Automated tube filling and sealing machines.</p></div></div>
-            <div class="card" id="card2"><img src="img/jar_bottle_filling_machine.jpg" alt="Jar Filling"><div class="card-content"><h3>Jar & Bottle Filling</h3><p>Efficient filling systems for containers.</p></div></div>
-            <div class="card" id="card3"><img src="img/end_to_end_packaging.jpg" alt="End Line"><div class="card-content"><h3>End Line Packaging</h3><p>Complete packaging automation solutions.</p></div></div>
-            <div class="card" id="card4"><img src="img/taping_machine.jpg" alt="Taping"><div class="card-content"><h3>Taping Machine</h3><p>Fast and reliable carton sealing systems.</p></div></div>`;
-        cards = Array.from(drumStage.querySelectorAll(".card"));
-        renderDrum(0);
-    }
+// ─── API helpers ─────────────────────────────────────────────────────────────
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(`${API}${path}`, {
+    ...opts,
+    headers: { "x-admin-key": ADMIN_KEY, "Content-Type": "application/json", ...(opts.headers || {}) }
+  });
+  return res.json();
 }
 
-loadDrumProducts();
-</script>
+// ─── Load all ────────────────────────────────────────────────────────────────
+async function loadAll() { loadDashboard(); }
+async function refreshAll() { loadDashboard(); toast("Refreshed!"); }
 
+// ─── Dashboard ───────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const [subs, prods] = await Promise.all([
+    apiFetch("/api/admin/submissions"),
+    apiFetch("/api/admin/products")
+  ]);
 
-<!-- HOW IT WORKS SECTION -->
-<div class="hiw-section" id="how-it-works">
-    <div class="hiw-header">
-        <h2 class="hiw-title">How It Works</h2>
-        <p class="hiw-sub">From first conversation to final installation — a seamless journey</p>
-    </div>
+  const newCount    = subs.filter(s => s.status === "new").length;
+  const quoteCount  = subs.filter(s => s.type === "quote").length;
+  const activeProds = prods.filter(p => p.active).length;
 
-    <div class="hiw-track-wrap">
-        <svg class="hiw-svg" viewBox="0 0 1000 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="planePath"
-                d="M 120,80 C 200,80 220,80 310,80 C 390,80 410,80 500,80 C 580,80 600,80 690,80 C 770,80 790,80 880,80"
-                fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-dasharray="8 6"/>
-            <circle cx="310" cy="80" r="4" fill="rgba(255,255,255,0.2)"/>
-            <circle cx="500" cy="80" r="4" fill="rgba(255,255,255,0.2)"/>
-            <circle cx="690" cy="80" r="4" fill="rgba(255,255,255,0.2)"/>
-            <g id="plane">
-                <g transform="translate(-22,-11)">
-                    <path d="M22,0 L8,0 Q0,0 0,11 Q0,22 8,22 L22,22 Z" fill="rgba(255,255,255,0.92)"/>
-                    <path d="M22,0 L36,0 Q44,0 44,11 Q44,22 36,22 L22,22 Z" fill="rgba(255,255,255,0.55)"/>
-                    <line x1="22" y1="1" x2="22" y2="21" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-                    <path d="M8,3 Q4,6 4,11 Q4,15 7,18" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-                </g>
-            </g>
-        </svg>
+  document.getElementById("stat-total").textContent    = subs.length;
+  document.getElementById("stat-new").textContent      = newCount;
+  document.getElementById("stat-quotes").textContent   = quoteCount;
+  document.getElementById("stat-products").textContent = activeProds;
 
-        <div class="hiw-steps">
-            <div class="hiw-step" data-index="0">
-                <div class="hiw-circle">
-                    <div class="hiw-circle-inner">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="12" r="5" stroke="white" stroke-width="1.8"/><path d="M6 28c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
-                    </div>
-                    <div class="hiw-pulse"></div>
-                </div>
-                <div class="hiw-step-label">
-                    <span class="hiw-num">01</span>
-                    <h3>Consult</h3>
-                    <p>We understand your production needs & goals</p>
-                </div>
-            </div>
+  const badge = document.getElementById("newBadge");
+  badge.textContent = newCount;
+  badge.classList.toggle("show", newCount > 0);
 
-            <div class="hiw-step" data-index="1">
-                <div class="hiw-circle">
-                    <div class="hiw-circle-inner">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="20" height="20" rx="3" stroke="white" stroke-width="1.8"/><path d="M10 16h12M16 10v12" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
-                    </div>
-                    <div class="hiw-pulse"></div>
-                </div>
-                <div class="hiw-step-label">
-                    <span class="hiw-num">02</span>
-                    <h3>Design</h3>
-                    <p>Custom engineering & technical drawings</p>
-                </div>
-            </div>
-
-            <div class="hiw-step" data-index="2">
-                <div class="hiw-circle">
-                    <div class="hiw-circle-inner">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 24V14l8-8 8 8v10" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><rect x="12" y="18" width="8" height="6" rx="1" stroke="white" stroke-width="1.8"/></svg>
-                    </div>
-                    <div class="hiw-pulse"></div>
-                </div>
-                <div class="hiw-step-label">
-                    <span class="hiw-num">03</span>
-                    <h3>Manufacture</h3>
-                    <p>Precision-built machines in our facility</p>
-                </div>
-            </div>
-
-            <div class="hiw-step" data-index="3">
-                <div class="hiw-circle">
-                    <div class="hiw-circle-inner">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 20l5 5L26 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <div class="hiw-pulse"></div>
-                </div>
-                <div class="hiw-step-label">
-                    <span class="hiw-num">04</span>
-                    <h3>Install</h3>
-                    <p>On-site setup, testing & full handover</p>
-                </div>
-            </div>
+  const tbody  = document.getElementById("dashboard-tbody");
+  const recent = subs.slice(0, 8);
+  if (!recent.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No submissions yet</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = recent.map(s => `
+    <tr>
+      <td class="td-name">${s.name || "—"}</td>
+      <td><span class="badge badge-${s.type}">${s.type}</span></td>
+      <td class="td-product">${s.product || "—"}</td>
+      <td><span class="badge badge-${s.status}">${s.status}</span></td>
+      <td class="td-date">${fmtDate(s.createdAt)}</td>
+      <td><div class="row-actions">
+        <div class="icon-btn" title="View" onclick="viewSubmission(${JSON.stringify(s).replace(/"/g,"&quot;")})">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
         </div>
-    </div>
-</div>
-
-<style>
-.hiw-section {
-    margin: 30px 30px 20px;
-    padding: 40px 50px;
-    background: linear-gradient(135deg, rgba(70, 170, 255, 0.65), rgba(80, 210, 190, 0.55));
-    backdrop-filter: blur(14px);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.35);
-    position: relative;
-    overflow: hidden;
+      </div></td>
+    </tr>`).join("");
 }
-.hiw-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.08), transparent 70%);
-    pointer-events: none;
+
+// ─── Submissions ─────────────────────────────────────────────────────────────
+async function loadSubmissions() {
+  document.getElementById("subs-tbody").innerHTML = `<tr class="loading-row"><td colspan="8"><span class="spinner"></span></td></tr>`;
+  allSubmissions = await apiFetch("/api/admin/submissions");
+  renderSubs();
 }
-.hiw-header { text-align: center; margin-bottom: 40px; }
-.hiw-title  { font-size: 28px; font-weight: 800; color: #fff; margin: 0 0 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-.hiw-sub    { font-size: 14px; color: rgba(255,255,255,0.75); margin: 0; }
-.hiw-track-wrap { position: relative; }
-.hiw-svg {
-    position: absolute;
-    top: 50%; left: 0;
-    width: 100%; height: 60px;
-    transform: translateY(-80px);
-    pointer-events: none;
-    z-index: 1;
+
+function filterSubs(type, btn) {
+  subFilter = type;
+  document.querySelectorAll(".toolbar .filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderSubs();
 }
-.hiw-steps { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 2; }
-.hiw-step { display: flex; flex-direction: column; align-items: center; gap: 18px; flex: 1; cursor: pointer; transition: transform 0.3s ease; }
-.hiw-step:hover { transform: translateY(-6px); }
-.hiw-circle { position: relative; width: 88px; height: 88px; display: flex; align-items: center; justify-content: center; }
-.hiw-circle-inner {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.18);
-    border: 2px solid rgba(255,255,255,0.55);
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.3s ease, transform 0.3s ease;
-    position: relative; z-index: 2;
+
+function searchSubs(val) {
+  subSearch = val.toLowerCase();
+  renderSubs();
 }
-.hiw-step:hover .hiw-circle-inner { background: rgba(255,255,255,0.3); transform: scale(1.08); }
-.hiw-pulse {
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.3);
-    animation: hiwPulse 2.5s ease-out infinite;
-}
-.hiw-step:nth-child(2) .hiw-pulse { animation-delay: 0.6s; }
-.hiw-step:nth-child(3) .hiw-pulse { animation-delay: 1.2s; }
-.hiw-step:nth-child(4) .hiw-pulse { animation-delay: 1.8s; }
-@keyframes hiwPulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
-.hiw-step-label { text-align: center; }
-.hiw-num { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 2px; display: block; margin-bottom: 4px; }
-.hiw-step-label h3 { font-size: 16px; font-weight: 700; color: #fff; margin: 0 0 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.hiw-step-label p  { font-size: 12px; color: rgba(255,255,255,0.72); margin: 0; line-height: 1.5; max-width: 130px; }
-.hiw-circle-inner.active { background: rgba(255,255,255,0.38); border-color: rgba(255,255,255,0.9); box-shadow: 0 0 20px rgba(255,255,255,0.25); }
-</style>
 
-<script>
-(function() {
-    const path    = document.getElementById("planePath");
-    const plane   = document.getElementById("plane");
-    const circles = document.querySelectorAll(".hiw-circle-inner");
-    const totalLen = path.getTotalLength();
-    const stepFracs = [0, 0.333, 0.666, 1.0];
-    let progress = 0, direction = 1, paused = false, pauseTimer = null;
+function renderSubs() {
+  let list = allSubmissions;
+  if (subFilter === "contact") list = list.filter(s => s.type === "contact");
+  else if (subFilter === "quote") list = list.filter(s => s.type === "quote");
+  else if (subFilter === "new")   list = list.filter(s => s.status === "new");
 
-    function updatePlane(t) {
-        const pt = path.getPointAtLength(t * totalLen);
-        plane.setAttribute("transform", "translate(" + pt.x + "," + pt.y + ")");
-        let closest = 0, minDist = Infinity;
-        stepFracs.forEach((f, i) => { const d = Math.abs(t - f); if (d < minDist) { minDist = d; closest = i; } });
-        circles.forEach((c, i) => c.classList.toggle("active", i === closest));
-    }
+  if (subSearch) list = list.filter(s =>
+    (s.name||"").toLowerCase().includes(subSearch) ||
+    (s.email||"").toLowerCase().includes(subSearch)
+  );
 
-    function animate() {
-        if (!paused) {
-            progress += 0.0018 * direction;
-            stepFracs.forEach((f) => {
-                if (Math.abs(progress - f) < 0.002 && !paused) {
-                    paused = true;
-                    clearTimeout(pauseTimer);
-                    pauseTimer = setTimeout(() => { paused = false; }, 900);
-                }
-            });
-            if (progress >= 1) { progress = 1; direction = -1; }
-            if (progress <= 0) { progress = 0; direction =  1; }
-        }
-        updatePlane(progress);
-        requestAnimationFrame(animate);
-    }
-    updatePlane(0);
-    animate();
-})();
-</script>
+  const tbody = document.getElementById("subs-tbody");
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><p>No submissions found</p></div></td></tr>`;
+    return;
+  }
 
-
-<!-- PRODUCTS SECTION -->
-<div class="prod-section" id="products">
-    <div class="prod-header">
-        <h2 class="prod-title">Our Products</h2>
-        <p class="prod-sub">Purpose-built machines for every stage of your production line</p>
-    </div>
-    <div class="prod-list" id="prod-list">
-        <!-- Loaded dynamically from backend -->
-        <div style="text-align:center; padding:40px; color:#5a7a80; font-size:14px;">Loading products…</div>
-    </div>
-</div>
-
-<style>
-.prod-section { margin: 30px 30px 20px; }
-.prod-header  { text-align: center; margin-bottom: 36px; }
-.prod-title   { font-size: 28px; font-weight: 800; color: #003b44; margin: 0 0 8px; }
-.prod-sub     { font-size: 14px; color: #5a7a80; margin: 0; }
-.prod-list    { display: flex; flex-direction: column; gap: 24px; }
-
-.prod-card {
-    display: flex;
-    align-items: stretch;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.5);
-    background: linear-gradient(135deg, rgba(70,170,255,0.18), rgba(80,210,190,0.14));
-    backdrop-filter: blur(14px);
-    box-shadow: 0 4px 24px rgba(0,59,68,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.prod-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,59,68,0.14); }
-.prod-card-reverse { flex-direction: row-reverse; }
-
-.prod-img-wrap {
-    position: relative;
-    width: 42%;
-    flex-shrink: 0;
-    overflow: hidden;
-    min-height: 280px;
-}
-.prod-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
-.prod-card:hover .prod-img-wrap img { transform: scale(1.05); }
-.prod-img-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,59,68,0.25), rgba(70,170,255,0.15)); }
-.prod-tag {
-    position: absolute; top: 16px; left: 16px;
-    background: rgba(255,255,255,0.92);
-    color: #003b44;
-    font-size: 11px; font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-}
-.prod-card-reverse .prod-tag { left: auto; right: 16px; }
-
-.prod-info {
-    flex: 1;
-    padding: 36px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 14px;
-}
-.prod-info h3 { font-size: 22px; font-weight: 800; color: #003b44; margin: 0; line-height: 1.2; }
-.prod-info p  { font-size: 14px; color: #4a6a70; line-height: 1.7; margin: 0; }
-
-.prod-specs { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
-.prod-specs li { font-size: 13px; color: #003b44; padding-left: 18px; position: relative; }
-.prod-specs li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #4fc3c8; }
-
-.prod-btn {
-    display: inline-block;
-    align-self: flex-start;
-    margin-top: 4px;
-    padding: 12px 28px;
-    background: linear-gradient(135deg, rgba(70,170,255,0.85), rgba(80,210,190,0.75));
-    color: #fff;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px; font-weight: 600;
-    border-radius: 12px;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.prod-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(70,170,255,0.35); }
-</style>
-
-<script>
-async function loadProducts() {
-    const list = document.getElementById("prod-list");
-    try {
-        const res = await fetch("/api/products");
-        const products = await res.json();
-
-        if (!products.length) {
-            list.innerHTML = `<div style="text-align:center; padding:40px; color:#5a7a80;">No products available right now.</div>`;
-            return;
-        }
-
-        list.innerHTML = products.map((p, i) => `
-            <div class="prod-card ${i % 2 !== 0 ? 'prod-card-reverse' : ''}">
-                <div class="prod-img-wrap">
-                    ${p.image ? `<img src="img/${p.image}" alt="${p.name}" onerror="this.src=''">` : ''}
-                    <div class="prod-img-overlay"></div>
-                    ${p.tag ? `<span class="prod-tag">${p.tag}</span>` : ''}
-                </div>
-                <div class="prod-info">
-                    <h3>${p.name}</h3>
-                    <p>${p.description||''}</p>
-                    ${p.specs && p.specs.length ? `
-                    <ul class="prod-specs">
-                        ${p.specs.map(s => `<li>${s}</li>`).join('')}
-                    </ul>` : ''}
-                    <a class="prod-btn" href="mailto:vishenterprise@outlook.com?subject=Enquiry: ${encodeURIComponent(p.name)}">Request a Quote</a>
-                </div>
-            </div>`).join("");
-    } catch {
-        // fallback to static content
-        list.innerHTML = `
-            <div class="prod-card">
-                <div class="prod-img-wrap"><img src="img/liquid_filling_machine.jpg" alt="Liquid Filling Machine"><div class="prod-img-overlay"></div><span class="prod-tag">Filling</span></div>
-                <div class="prod-info"><h3>Liquid Filling Machine</h3><p>High-precision volumetric filling systems designed for thin to viscous liquids.</p><ul class="prod-specs"><li>Fill range: 5ml – 5000ml</li><li>Speed: up to 80 fills/min</li><li>GMP compliant & SS316 construction</li></ul><a class="prod-btn" href="mailto:shashikants@rediffmail.com?subject=Enquiry: Liquid Filling Machine">Request a Quote</a></div>
-            </div>`;
-    }
-}
-loadProducts();
-</script>
-
-
-<!-- CONTACT SECTION -->
-<div class="contact-section" id="contact">
-    <div class="contact-inner">
-        <div class="contact-info">
-            <span class="contact-eyebrow">Get in Touch</span>
-            <h2 class="contact-title">Let's Build<br>Something Together</h2>
-            <p class="contact-desc">Tell us about your production requirements and our engineers will get back to you within 24 hours with a tailored solution.</p>
-            <div class="contact-details">
-                <div class="contact-detail-item">
-                    <div class="contact-detail-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <div>
-                        <span class="contact-detail-label">Email</span>
-                        <a href="mailto:vishenterprise@outlook.com" class="contact-detail-value">vishenterprise@outlook.com</a>
-                    </div>
-                </div>
-                <div class="contact-detail-item">
-                    <div class="contact-detail-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <div>
-                        <span class="contact-detail-label">Phone</span>
-                        <a href="tel:+919323563805" class="contact-detail-value">+91 93235 63805</a>
-                    </div>
-                </div>
-            </div>
+  tbody.innerHTML = list.map(s => `
+    <tr>
+      <td class="td-name">${s.name||"—"}</td>
+      <td class="td-email">${s.email||"—"}</td>
+      <td class="td-phone">${s.phone||"—"}</td>
+      <td><span class="badge badge-${s.type}">${s.type}</span></td>
+      <td class="td-product">${s.product||"—"}</td>
+      <td><span class="badge badge-${s.status}">${s.status}</span></td>
+      <td class="td-date">${fmtDate(s.createdAt)}</td>
+      <td><div class="row-actions">
+        <div class="icon-btn" title="View" onclick='viewSubmission(${JSON.stringify(s)})'>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
         </div>
-
-        <div class="contact-form-wrap">
-            <div class="contact-form-card">
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" type="text" placeholder="Rajesh Sharma" id="cf-name"></div>
-                    <div class="form-group"><label class="form-label">Company</label><input class="form-input" type="text" placeholder="Your Company Ltd." id="cf-company"></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="rajesh@company.com" id="cf-email"></div>
-                    <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" type="tel" placeholder="+91 98765 43210" id="cf-phone"></div>
-                </div>
-                <div class="form-group form-group-full">
-                    <label class="form-label">Product of Interest</label>
-                    <div class="form-select-wrap">
-                        <select class="form-input form-select" id="cf-product">
-                            <option value="" disabled selected>Select a machine...</option>
-                            <option>Liquid Filling Machine</option>
-                            <option>Tube Filling & Sealing Machine</option>
-                            <option>Jar & Bottle Filling Machine</option>
-                            <option>End Line Packaging System</option>
-                            <option>Taping Machine</option>
-                            <option>Custom / Multiple Machines</option>
-                        </select>
-                        <svg class="form-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#4fc3c8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                </div>
-                <div class="form-group form-group-full">
-                    <label class="form-label">Message</label>
-                    <textarea class="form-input form-textarea" placeholder="Tell us about your production volume, specific requirements, or any questions..." id="cf-message"></textarea>
-                </div>
-                <button class="form-submit" id="cfSubmit" onclick="handleContactSubmit()">
-                    <span class="form-submit-text">Send Message</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <div class="form-success" id="cfSuccess">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4fc3c8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <span>Thank you! We'll get back to you within 24 hours.</span>
-                </div>
-            </div>
+        <div class="icon-btn danger" title="Delete" onclick="deleteSub('${s._id}')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
-    </div>
-</div>
-
-<style>
-.contact-section {
-    margin: 30px 30px 20px;
-    padding: 60px 50px;
-    background: linear-gradient(135deg, rgba(70, 170, 255, 0.65), rgba(80, 210, 190, 0.55));
-    backdrop-filter: blur(14px);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.35);
-    position: relative;
-    overflow: hidden;
+      </div></td>
+    </tr>`).join("");
 }
-.contact-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.1), transparent 60%);
-    pointer-events: none;
-}
-.contact-inner { display: flex; gap: 60px; align-items: flex-start; position: relative; z-index: 1; }
-.contact-info  { flex: 0 0 38%; }
-.contact-eyebrow { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 14px; }
-.contact-title { font-size: 36px; font-weight: 800; color: #fff; margin: 0 0 18px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0,0,0,0.15); }
-.contact-desc  { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.7; margin: 0 0 36px; }
-.contact-details { display: flex; flex-direction: column; gap: 22px; }
-.contact-detail-item { display: flex; align-items: flex-start; gap: 16px; }
-.contact-detail-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.contact-detail-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
-.contact-detail-value { display: block; font-size: 13px; color: #fff; text-decoration: none; font-weight: 500; line-height: 1.5; transition: opacity 0.2s; }
-.contact-detail-value:hover { opacity: 0.75; }
-.contact-form-wrap { flex: 1; }
-.contact-form-card { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 36px; backdrop-filter: blur(8px); display: flex; flex-direction: column; gap: 18px; }
-.form-row { display: flex; gap: 16px; }
-.form-group { flex: 1; display: flex; flex-direction: column; gap: 7px; }
-.form-group-full { width: 100%; }
-.form-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.8); letter-spacing: 0.5px; }
-.form-input { font-family: 'Poppins', sans-serif; font-size: 13px; color: #fff; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 12px 16px; outline: none; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; width: 100%; box-sizing: border-box; }
-.form-input::placeholder { color: rgba(255,255,255,0.38); }
-.form-input:focus { border-color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.2); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
-.form-select-wrap { position: relative; }
-.form-select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 40px; }
-.form-select option { background: #003b44; color: #fff; }
-.form-select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
-.form-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
-.form-submit { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px 28px; background: linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.14)); border: 1px solid rgba(255,255,255,0.55); border-radius: 12px; color: #fff; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; margin-top: 4px; }
-.form-submit:hover { transform: translateY(-2px); background: rgba(255,255,255,0.32); box-shadow: 0 8px 28px rgba(0,0,0,0.15); }
-.form-success { display: none; align-items: center; gap: 12px; padding: 14px 18px; background: rgba(79, 195, 200, 0.22); border: 1px solid rgba(79, 195, 200, 0.5); border-radius: 12px; font-size: 13px; color: #fff; font-weight: 500; animation: fadeInUp 0.4s ease; }
-.form-success.show { display: flex; }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
-</style>
 
-<script>
-async function handleContactSubmit() {
-    const name    = document.getElementById("cf-name").value.trim();
-    const email   = document.getElementById("cf-email").value.trim();
-    const message = document.getElementById("cf-message").value.trim();
-
-    if (!name || !email || !message) {
-        [document.getElementById("cf-name"), document.getElementById("cf-email"), document.getElementById("cf-message")].forEach(el => {
-            if (!el.value.trim()) {
-                el.style.borderColor = "rgba(255,120,120,0.8)";
-                el.style.animation = "shake 0.3s ease";
-                setTimeout(() => { el.style.animation = ""; el.style.borderColor = ""; }, 600);
-            }
-        });
-        return;
-    }
-
-    const btn = document.getElementById("cfSubmit");
-    btn.disabled = true;
-    btn.querySelector(".form-submit-text").textContent = "Sending…";
-
-    const payload = {
-        type:    document.getElementById("cf-product").value ? "quote" : "contact",
-        name,
-        company: document.getElementById("cf-company").value.trim(),
-        email,
-        phone:   document.getElementById("cf-phone").value.trim(),
-        product: document.getElementById("cf-product").value,
-        message
+function viewSubmission(s) {
+  const content = document.getElementById("subModalContent");
+  content.innerHTML = `
+    <div class="detail-row"><div class="detail-key">Name</div><div class="detail-value">${s.name||"—"}</div></div>
+    <div class="detail-row"><div class="detail-key">Company</div><div class="detail-value">${s.company||"—"}</div></div>
+    <div class="detail-row"><div class="detail-key">Email</div><div class="detail-value"><a href="mailto:${s.email}" style="color:var(--accent)">${s.email||"—"}</a></div></div>
+    <div class="detail-row"><div class="detail-key">Phone</div><div class="detail-value">${s.phone||"—"}</div></div>
+    <div class="detail-row"><div class="detail-key">Type</div><div class="detail-value"><span class="badge badge-${s.type}">${s.type}</span></div></div>
+    <div class="detail-row"><div class="detail-key">Product</div><div class="detail-value">${s.product||"—"}</div></div>
+    <div class="detail-row"><div class="detail-key">Status</div><div class="detail-value"><span class="badge badge-${s.status}">${s.status}</span></div></div>
+    <div class="detail-row"><div class="detail-key">Date</div><div class="detail-value">${fmtDate(s.createdAt)}</div></div>
+    <div class="detail-row"><div class="detail-key">Message</div><div class="detail-value" style="white-space:pre-wrap">${s.message||"—"}</div></div>
+  `;
+  const btn = document.getElementById("subMarkReadBtn");
+  if (s.status === "new") {
+    btn.innerHTML = "Mark as Read";
+    btn.onclick = async () => {
+      await apiFetch(`/api/admin/submissions/${s._id}`, { method: "PATCH", body: JSON.stringify({ status: "read" }) });
+      toast("Marked as read");
+      closeModal("subModal");
+      loadSubmissions();
+      loadDashboard();
     };
+  } else if (s.status === "read") {
+    btn.innerHTML = "Mark as Replied";
+    btn.onclick = async () => {
+      await apiFetch(`/api/admin/submissions/${s._id}`, { method: "PATCH", body: JSON.stringify({ status: "replied" }) });
+      toast("Marked as replied");
+      closeModal("subModal");
+      loadSubmissions();
+      loadDashboard();
+    };
+  } else {
+    btn.innerHTML = "Reply by Email";
+    btn.onclick = () => { window.location.href = `mailto:${s.email}?subject=Re: Your enquiry – ${s.product||"VishEnterprises"}`; };
+  }
+  openModal("subModal");
+  if (s.status === "new") {
+    apiFetch(`/api/admin/submissions/${s._id}`, { method: "PATCH", body: JSON.stringify({ status: "read" }) });
+  }
+}
 
+async function deleteSub(id) {
+  if (!confirm("Delete this submission?")) return;
+  await apiFetch(`/api/admin/submissions/${id}`, { method: "DELETE" });
+  allSubmissions = allSubmissions.filter(s => s._id !== id);
+  renderSubs();
+  toast("Submission deleted");
+}
+
+// ─── Products ─────────────────────────────────────────────────────────────────
+async function loadProducts() {
+  document.getElementById("prod-grid").innerHTML = `<div style="color:var(--muted); font-size:13px; padding:20px; display:flex; align-items:center; gap:10px;"><span class="spinner"></span> Loading…</div>`;
+  const products = await apiFetch("/api/admin/products");
+  renderProducts(products);
+}
+
+function renderProducts(products) {
+  const grid = document.getElementById("prod-grid");
+  if (!products.length) {
+    grid.innerHTML = `<div class="empty-state"><p>No products yet. Click "Add Product" to get started.</p></div>`;
+    return;
+  }
+  grid.innerHTML = products.map(p => `
+    <div class="prod-admin-card">
+      <div class="prod-admin-img">
+        ${p.image
+          ? `<img src="img/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=prod-admin-img-placeholder>Image not found</div>'">`
+          : `<div class="prod-admin-img-placeholder">No image set</div>`}
+      </div>
+      <div class="prod-admin-body">
+        <div class="prod-admin-tag">${p.tag||""}</div>
+        <div class="prod-admin-name">${p.name}</div>
+        <div class="prod-admin-desc">${p.description||""}</div>
+      </div>
+      <div class="prod-admin-footer">
+        <span class="badge badge-${p.active ? 'active' : 'hidden'}">${p.active ? 'Active' : 'Hidden'}</span>
+        <div class="row-actions">
+          <div class="icon-btn" title="${p.active ? 'Hide' : 'Show'}" onclick="toggleProduct('${p._id}', ${!p.active})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <div class="icon-btn" title="Edit" onclick='editProduct(${JSON.stringify(p)})'>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="icon-btn danger" title="Delete" onclick="deleteProduct('${p._id}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+async function toggleProduct(id, active) {
+  await apiFetch(`/api/admin/products/${id}`, { method: "PATCH", body: JSON.stringify({ active }) });
+  toast(active ? "Product is now visible" : "Product hidden from site");
+  loadProducts();
+}
+
+async function deleteProduct(id) {
+  if (!confirm("Delete this product permanently?")) return;
+  await apiFetch(`/api/admin/products/${id}`, { method: "DELETE" });
+  toast("Product deleted");
+  loadProducts();
+}
+
+function openAddProduct() {
+  editingProductId = null;
+  selectedImageFile = null;
+  selectedImageBase64 = null;
+  document.getElementById("prodModalTitle").textContent = "Add Product";
+  document.getElementById("pm-id").value    = "";
+  document.getElementById("pm-name").value  = "";
+  document.getElementById("pm-tag").value   = "";
+  document.getElementById("pm-desc").value  = "";
+  document.getElementById("pm-image").value = "";
+  document.getElementById("pm-order").value = "1";
+  document.getElementById("specs-wrap").innerHTML = "";
+  addSpecRow();
+  clearImageUI();
+  openModal("prodModal");
+}
+
+function editProduct(p) {
+  editingProductId = p._id;
+  selectedImageFile = null;
+  selectedImageBase64 = null;
+  document.getElementById("prodModalTitle").textContent = "Edit Product";
+  document.getElementById("pm-id").value    = p._id;
+  document.getElementById("pm-name").value  = p.name||"";
+  document.getElementById("pm-tag").value   = p.tag||"";
+  document.getElementById("pm-desc").value  = p.description||"";
+  document.getElementById("pm-image").value = p.image||"";
+  document.getElementById("pm-order").value = p.order||1;
+  document.getElementById("specs-wrap").innerHTML = "";
+  (p.specs||[]).forEach(spec => addSpecRow(spec));
+  if (!(p.specs||[]).length) addSpecRow();
+
+  // Show existing image preview if available
+  if (p.image) {
+    showImagePreview(`img/${p.image}`, p.image);
+  } else {
+    clearImageUI();
+  }
+
+  openModal("prodModal");
+}
+
+// ─── Image upload handlers ────────────────────────────────────────────────────
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  processImageFile(file);
+}
+
+function handleDragOver(event) {
+  event.preventDefault();
+  document.getElementById("imgDropZone").classList.add("drag-over");
+}
+
+function handleDragLeave(event) {
+  document.getElementById("imgDropZone").classList.remove("drag-over");
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  document.getElementById("imgDropZone").classList.remove("drag-over");
+  const file = event.dataTransfer.files[0];
+  if (!file || !file.type.startsWith("image/")) {
+    toast("Please drop an image file");
+    return;
+  }
+  processImageFile(file);
+}
+
+function processImageFile(file) {
+  // Validate size (5MB max)
+  if (file.size > 5 * 1024 * 1024) {
+    toast("Image too large — max 5MB");
+    return;
+  }
+
+  selectedImageFile = file;
+  // Clear the manual filename when file is chosen
+  document.getElementById("pm-image").value = "";
+
+  // Read as data URL for preview
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    selectedImageBase64 = e.target.result;
+    showImagePreview(e.target.result, file.name);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showImagePreview(src, filename) {
+  document.getElementById("imgPreview").src = src;
+  document.getElementById("imgFilenameTag").textContent = filename;
+  document.getElementById("imgPlaceholder").style.display = "none";
+  document.getElementById("imgPreviewWrap").classList.add("show");
+  document.getElementById("imgDropZone").classList.add("has-image");
+}
+
+function clearImage() {
+  selectedImageFile = null;
+  selectedImageBase64 = null;
+  document.getElementById("pm-img-file").value = "";
+  clearImageUI();
+}
+
+function clearImageUI() {
+  document.getElementById("imgPreview").src = "";
+  document.getElementById("imgFilenameTag").textContent = "";
+  document.getElementById("imgPlaceholder").style.display = "flex";
+  document.getElementById("imgPreviewWrap").classList.remove("show");
+  document.getElementById("imgDropZone").classList.remove("has-image", "drag-over");
+  document.getElementById("uploadProgress").classList.remove("show");
+  document.getElementById("uploadProgressBar").style.width = "0%";
+}
+
+function handleManualFilename(val) {
+  // When manual filename is typed, clear the file upload selection
+  if (val) {
+    selectedImageFile = null;
+    selectedImageBase64 = null;
+    document.getElementById("pm-img-file").value = "";
+    // Show a preview attempt with the img/ path
+    showImagePreview(`img/${val}`, val);
+  } else {
+    clearImageUI();
+  }
+}
+
+/**
+ * Upload image file to the server.
+ * Expects your server to have: POST /api/admin/upload-image
+ * with multipart/form-data containing "image" field.
+ * Returns { filename: "uploaded_name.jpg" }
+ *
+ * If your server doesn't have this endpoint yet, it falls back
+ * to storing the base64 in the product record (less ideal but works).
+ */
+async function uploadImageToServer(file) {
+  const progressBar = document.getElementById("uploadProgress");
+  const progressFill = document.getElementById("uploadProgressBar");
+  progressBar.classList.add("show");
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append("image", file);
+
+    xhr.upload.addEventListener("progress", (e) => {
+      if (e.lengthComputable) {
+        const pct = Math.round((e.loaded / e.total) * 100);
+        progressFill.style.width = pct + "%";
+      }
+    });
+
+    xhr.addEventListener("load", () => {
+      progressBar.classList.remove("show");
+      progressFill.style.width = "0%";
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          resolve(data.filename || data.name || file.name);
+        } catch {
+          resolve(file.name);
+        }
+      } else {
+        reject(new Error(`Upload failed: ${xhr.status}`));
+      }
+    });
+
+    xhr.addEventListener("error", () => {
+      progressBar.classList.remove("show");
+      reject(new Error("Upload failed — network error"));
+    });
+
+    xhr.open("POST", `${API}/api/admin/upload-image`);
+    xhr.setRequestHeader("x-admin-key", ADMIN_KEY);
+    xhr.send(formData);
+  });
+}
+
+// ─── Save product ─────────────────────────────────────────────────────────────
+async function saveProduct() {
+  const name = document.getElementById("pm-name").value.trim();
+  if (!name) { toast("Product name is required"); return; }
+
+  const btn = document.getElementById("saveProductBtn");
+  const btnText = document.getElementById("saveBtnText");
+  btn.disabled = true;
+  btnText.textContent = "Saving…";
+
+  const specs = Array.from(document.querySelectorAll("#specs-wrap .spec-row input"))
+    .map(i => i.value.trim()).filter(Boolean);
+
+  let imageName = document.getElementById("pm-image").value.trim();
+
+  // If a new file was selected, upload it first
+  if (selectedImageFile) {
     try {
-        const res = await fetch("/api/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-            btn.style.display = "none";
-            document.getElementById("cfSuccess").classList.add("show");
-        } else { throw new Error(); }
-    } catch {
-        // fallback to mailto if backend unreachable
-        const subject = encodeURIComponent("Enquiry: " + (payload.product || "General") + " – " + name);
-        const body    = encodeURIComponent(`Name: ${name}\nCompany: ${payload.company||'–'}\nPhone: ${payload.phone||'–'}\nProduct: ${payload.product||'–'}\n\nMessage:\n${message}`);
-        window.location.href = `mailto:shashikants@rediffmail.com?subject=${subject}&body=${body}`;
-        btn.disabled = false;
-        btn.querySelector(".form-submit-text").textContent = "Send Message";
+      btnText.textContent = "Uploading image…";
+      imageName = await uploadImageToServer(selectedImageFile);
+      toast(`Image uploaded: ${imageName}`);
+    } catch (err) {
+      // If upload endpoint doesn't exist yet, warn and continue without image
+      console.warn("Image upload failed:", err);
+      toast("⚠️ Image upload failed — add POST /api/admin/upload-image to your server. Product saved without new image.");
+      imageName = document.getElementById("pm-image").value.trim(); // keep existing
     }
+  }
+
+  const body = {
+    name,
+    tag:         document.getElementById("pm-tag").value.trim(),
+    description: document.getElementById("pm-desc").value.trim(),
+    image:       imageName,
+    order:       parseInt(document.getElementById("pm-order").value) || 1,
+    specs
+  };
+
+  try {
+    if (editingProductId) {
+      await apiFetch(`/api/admin/products/${editingProductId}`, { method: "PATCH", body: JSON.stringify(body) });
+      toast("Product updated!");
+    } else {
+      await apiFetch("/api/admin/products", { method: "POST", body: JSON.stringify(body) });
+      toast("Product added!");
+    }
+    closeModal("prodModal");
+    loadProducts();
+  } catch (err) {
+    toast("Error saving product");
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = "Save Product";
+  }
+}
+
+function addSpecRow(value = "") {
+  const wrap = document.getElementById("specs-wrap");
+  const row = document.createElement("div");
+  row.className = "spec-row";
+  row.innerHTML = `<input class="form-input-modal" placeholder="e.g. Speed: up to 80 fills/min" value="${value}">
+    <button class="spec-remove" onclick="this.parentElement.remove()">×</button>`;
+  wrap.appendChild(row);
+}
+
+// ─── Modal helpers ───────────────────────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+document.querySelectorAll(".modal-overlay").forEach(m => {
+  m.addEventListener("click", e => { if (e.target === m) m.classList.remove("open"); });
+});
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById("toast");
+  document.getElementById("toast-msg").textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function fmtDate(d) {
+  if (!d) return "—";
+  const dt = new Date(d);
+  return dt.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) +
+    " " + dt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
 }
 </script>
-
-
-<!-- FOOTER -->
-<footer class="site-footer">
-    <div class="footer-inner">
-        <div class="footer-brand">
-            <div class="footer-logo">VishEnterprises</div>
-            <p class="footer-tagline">End-to-end processing and packaging solutions engineered for precision, performance, and compliance.</p>
-            <div class="footer-socials">
-                <a href="#" class="footer-social-btn" aria-label="LinkedIn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="white" stroke-width="1.7"/></svg>
-                </a>
-                <a href="https://wa.me/919323563805" class="footer-social-btn" aria-label="WhatsApp">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-            </div>
-        </div>
-
-        <div class="footer-col">
-            <h4 class="footer-col-title">Quick Links</h4>
-            <ul class="footer-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#contact">Contact Us</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4 class="footer-col-title">Our Products</h4>
-            <ul class="footer-links">
-                <li><a href="#products">Liquid Filling Machine</a></li>
-                <li><a href="#products">Tube Filling & Sealing</a></li>
-                <li><a href="#products">Jar & Bottle Filling</a></li>
-                <li><a href="#products">End Line Packaging</a></li>
-                <li><a href="#products">Taping Machine</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4 class="footer-col-title">Contact</h4>
-            <ul class="footer-contact-list">
-                <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="rgba(255,255,255,0.55)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <a href="mailto:shashikants@rediffmail.com">vishenterprise@outlook.com</a>
-                </li>
-                <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="rgba(255,255,255,0.55)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <a href="tel:+919323563805">+91 93235 63805</a>
-                </li>
-                <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.55)" stroke-width="1.7"/><path d="M12 6v6l4 2" stroke="rgba(255,255,255,0.55)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <span>Mon – Sat: 9:00 AM – 6:00 PM</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        <span>&copy; 2025 VishEnterprises. All rights reserved.</span>
-        <div class="footer-bottom-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Sitemap</a>
-        </div>
-    </div>
-</footer>
-
-<style>
-.site-footer { margin: 30px 30px 0; background: linear-gradient(135deg, rgba(0,40,50,0.92), rgba(0,59,68,0.95)); backdrop-filter: blur(20px); border-radius: 20px 20px 0 0; border: 1px solid rgba(255,255,255,0.12); border-bottom: none; overflow: hidden; position: relative; }
-.site-footer::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 15% 0%, rgba(70,170,255,0.12), transparent 55%), radial-gradient(ellipse at 85% 100%, rgba(80,210,190,0.1), transparent 55%); pointer-events: none; }
-.footer-inner { display: flex; gap: 48px; padding: 56px 50px 44px; position: relative; z-index: 1; }
-.footer-brand { flex: 0 0 28%; }
-.footer-logo  { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; letter-spacing: -0.3px; }
-.footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; margin: 0 0 24px; }
-.footer-socials { display: flex; gap: 10px; }
-.footer-social-btn { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s ease, transform 0.2s ease; }
-.footer-social-btn:hover { background: rgba(79,195,200,0.25); transform: translateY(-2px); border-color: rgba(79,195,200,0.5); }
-.footer-col { flex: 1; }
-.footer-col-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin: 0 0 20px; }
-.footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-.footer-links li a { font-size: 13px; color: rgba(255,255,255,0.62); text-decoration: none; transition: color 0.2s ease; }
-.footer-links li a:hover { color: #fff; }
-.footer-contact-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.footer-contact-list li { display: flex; align-items: flex-start; gap: 10px; }
-.footer-contact-list li svg { flex-shrink: 0; margin-top: 2px; }
-.footer-contact-list li a, .footer-contact-list li span { font-size: 12px; color: rgba(255,255,255,0.58); text-decoration: none; line-height: 1.5; transition: color 0.2s; }
-.footer-contact-list li a:hover { color: #fff; }
-.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding: 18px 50px; border-top: 1px solid rgba(255,255,255,0.08); position: relative; z-index: 1; }
-.footer-bottom span { font-size: 12px; color: rgba(255,255,255,0.3); }
-.footer-bottom-links { display: flex; gap: 24px; }
-.footer-bottom-links a { font-size: 12px; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
-.footer-bottom-links a:hover { color: rgba(255,255,255,0.7); }
-</style>
 
 </body>
 </html>
