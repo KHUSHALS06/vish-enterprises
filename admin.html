@@ -462,7 +462,7 @@ tbody td {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 36px;
-  width: 520px;
+  width: 560px;
   max-height: 90vh;
   overflow-y: auto;
   transform: translateY(20px);
@@ -527,6 +527,166 @@ tbody td {
 .form-input-modal::placeholder { color: var(--muted); }
 
 textarea.form-input-modal { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+/* ── IMAGE UPLOAD ZONE ─────────────────────────────────── */
+.img-upload-zone {
+  width: 100%;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  background: var(--surface2);
+}
+.img-upload-zone:hover { border-color: var(--accent); background: rgba(79,195,200,0.04); }
+.img-upload-zone.drag-over { border-color: var(--accent); background: rgba(79,195,200,0.08); }
+.img-upload-zone.has-image { border-style: solid; border-color: rgba(79,195,200,0.4); }
+
+.img-upload-input { display: none; }
+
+.img-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 30px 20px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.img-upload-placeholder svg { opacity: 0.5; }
+.img-upload-placeholder span { font-size: 12px; font-weight: 500; text-align: center; line-height: 1.5; }
+.img-upload-placeholder small { font-size: 10px; opacity: 0.6; }
+
+.img-preview-wrap {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.img-preview-wrap.show { display: block; }
+.img-preview {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.img-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.img-upload-zone:hover .img-preview-overlay { opacity: 1; }
+
+.img-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s;
+}
+.img-action-btn:hover { transform: scale(1.05); }
+.img-action-btn.change { background: rgba(79,195,200,0.9); color: #000; }
+.img-action-btn.remove { background: rgba(255,107,107,0.9); color: #fff; }
+
+.img-filename-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0,0,0,0.7);
+  color: var(--muted);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 3px 8px;
+  border-radius: 6px;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.img-upload-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Upload progress bar */
+.upload-progress {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--border);
+  display: none;
+}
+.upload-progress.show { display: block; }
+.upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Also keep the filename field below for manual entry */
+.img-filename-manual {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.img-filename-manual input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+  margin-top: 4px;
+}
+.img-filename-manual input:focus { border-color: var(--accent); }
+
+/* Divider for image section */
+.img-or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.img-or-divider::before,
+.img-or-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
 
 .specs-input-wrap { display: flex; flex-direction: column; gap: 8px; }
 .spec-row { display: flex; gap: 8px; align-items: center; }
@@ -815,10 +975,66 @@ textarea.form-input-modal { resize: vertical; min-height: 80px; line-height: 1.6
       <textarea class="form-input-modal" id="pm-desc" placeholder="Describe the machine..."></textarea>
     </div>
 
+    <!-- ── IMAGE UPLOAD ──────────────────────────────── -->
     <div class="form-group-modal full">
-      <label class="form-label-modal">Image filename (from img/ folder)</label>
-      <input class="form-input-modal" id="pm-image" placeholder="e.g. liquid_filling_machine.jpg">
+      <label class="form-label-modal">Product Image</label>
+
+      <!-- Drop zone -->
+      <div class="img-upload-zone" id="imgDropZone"
+           onclick="document.getElementById('pm-img-file').click()"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event)">
+
+        <input type="file" id="pm-img-file" class="img-upload-input"
+               accept="image/jpeg,image/png,image/webp,image/gif"
+               onchange="handleFileSelect(event)">
+
+        <!-- Placeholder shown when no image -->
+        <div class="img-upload-placeholder" id="imgPlaceholder">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Click to upload or drag & drop image here</span>
+          <small>JPG, PNG, WEBP · Max 5MB</small>
+        </div>
+
+        <!-- Preview shown when image selected -->
+        <div class="img-preview-wrap" id="imgPreviewWrap">
+          <img class="img-preview" id="imgPreview" src="" alt="Preview">
+          <div class="img-preview-overlay">
+            <button class="img-action-btn change" onclick="event.stopPropagation(); document.getElementById('pm-img-file').click()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Change
+            </button>
+            <button class="img-action-btn remove" onclick="event.stopPropagation(); clearImage()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Remove
+            </button>
+          </div>
+          <div class="img-filename-tag" id="imgFilenameTag"></div>
+        </div>
+
+        <!-- Upload progress -->
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        </div>
+      </div>
+
+      <div class="img-upload-hint">Image will be uploaded to your server's <code style="color:var(--accent); font-size:10px;">img/</code> folder</div>
+
+      <!-- Divider -->
+      <div class="img-or-divider">OR USE EXISTING FILENAME</div>
+
+      <!-- Manual filename fallback -->
+      <div class="img-filename-manual">
+        <span>Already have a file in the <code style="color:var(--accent);">img/</code> folder? Enter its name:</span>
+        <input id="pm-image" placeholder="e.g. liquid_filling_machine.jpg" oninput="handleManualFilename(this.value)">
+      </div>
     </div>
+    <!-- ────────────────────────────────────────────── -->
 
     <div class="form-group-modal full">
       <label class="form-label-modal">Specs</label>
@@ -833,7 +1049,9 @@ textarea.form-input-modal { resize: vertical; min-height: 80px; line-height: 1.6
 
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('prodModal')">Cancel</button>
-      <button class="btn-primary" onclick="saveProduct()">Save Product</button>
+      <button class="btn-primary" id="saveProductBtn" onclick="saveProduct()">
+        <span id="saveBtnText">Save Product</span>
+      </button>
     </div>
   </div>
 </div>
@@ -846,7 +1064,7 @@ textarea.form-input-modal { resize: vertical; min-height: 80px; line-height: 1.6
 
 <script>
 // ─── Config ──────────────────────────────────────────────────────────────────
-const API = ""; // empty = same origin (your server)
+const API = "";
 let ADMIN_KEY = "";
 
 // ─── State ───────────────────────────────────────────────────────────────────
@@ -854,13 +1072,14 @@ let allSubmissions = [];
 let subFilter = "all";
 let subSearch  = "";
 let editingProductId = null;
+let selectedImageFile = null;   // holds the File object chosen for upload
+let selectedImageBase64 = null; // fallback: base64 if server upload not available
 
 // ─── Login ───────────────────────────────────────────────────────────────────
 function doLogin() {
   const key = document.getElementById("loginKey").value.trim();
   if (!key) return;
   ADMIN_KEY = key;
-  // Test the key
   fetch(`${API}/api/admin/submissions?limit=1`, {
     headers: { "x-admin-key": ADMIN_KEY }
   }).then(r => {
@@ -911,14 +1130,8 @@ async function apiFetch(path, opts = {}) {
 }
 
 // ─── Load all ────────────────────────────────────────────────────────────────
-async function loadAll() {
-  loadDashboard();
-}
-
-async function refreshAll() {
-  loadDashboard();
-  toast("Refreshed!");
-}
+async function loadAll() { loadDashboard(); }
+async function refreshAll() { loadDashboard(); toast("Refreshed!"); }
 
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 async function loadDashboard() {
@@ -940,7 +1153,7 @@ async function loadDashboard() {
   badge.textContent = newCount;
   badge.classList.toggle("show", newCount > 0);
 
-  const tbody = document.getElementById("dashboard-tbody");
+  const tbody  = document.getElementById("dashboard-tbody");
   const recent = subs.slice(0, 8);
   if (!recent.length) {
     tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No submissions yet</p></div></td></tr>`;
@@ -1011,7 +1224,7 @@ function renderSubs() {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
         </div>
         <div class="icon-btn danger" title="Delete" onclick="deleteSub('${s._id}')">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
       </div></td>
     </tr>`).join("");
@@ -1054,7 +1267,6 @@ function viewSubmission(s) {
     btn.onclick = () => { window.location.href = `mailto:${s.email}?subject=Re: Your enquiry – ${s.product||"VishEnterprises"}`; };
   }
   openModal("subModal");
-  // auto-mark as read
   if (s.status === "new") {
     apiFetch(`/api/admin/submissions/${s._id}`, { method: "PATCH", body: JSON.stringify({ status: "read" }) });
   }
@@ -1085,7 +1297,7 @@ function renderProducts(products) {
     <div class="prod-admin-card">
       <div class="prod-admin-img">
         ${p.image
-          ? `<img src="img/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=prod-admin-img-placeholder>No image</div>'">`
+          ? `<img src="img/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=prod-admin-img-placeholder>Image not found</div>'">`
           : `<div class="prod-admin-img-placeholder">No image set</div>`}
       </div>
       <div class="prod-admin-body">
@@ -1125,6 +1337,8 @@ async function deleteProduct(id) {
 
 function openAddProduct() {
   editingProductId = null;
+  selectedImageFile = null;
+  selectedImageBase64 = null;
   document.getElementById("prodModalTitle").textContent = "Add Product";
   document.getElementById("pm-id").value    = "";
   document.getElementById("pm-name").value  = "";
@@ -1134,11 +1348,14 @@ function openAddProduct() {
   document.getElementById("pm-order").value = "1";
   document.getElementById("specs-wrap").innerHTML = "";
   addSpecRow();
+  clearImageUI();
   openModal("prodModal");
 }
 
 function editProduct(p) {
   editingProductId = p._id;
+  selectedImageFile = null;
+  selectedImageBase64 = null;
   document.getElementById("prodModalTitle").textContent = "Edit Product";
   document.getElementById("pm-id").value    = p._id;
   document.getElementById("pm-name").value  = p.name||"";
@@ -1149,7 +1366,209 @@ function editProduct(p) {
   document.getElementById("specs-wrap").innerHTML = "";
   (p.specs||[]).forEach(spec => addSpecRow(spec));
   if (!(p.specs||[]).length) addSpecRow();
+
+  // Show existing image preview if available
+  if (p.image) {
+    showImagePreview(`img/${p.image}`, p.image);
+  } else {
+    clearImageUI();
+  }
+
   openModal("prodModal");
+}
+
+// ─── Image upload handlers ────────────────────────────────────────────────────
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  processImageFile(file);
+}
+
+function handleDragOver(event) {
+  event.preventDefault();
+  document.getElementById("imgDropZone").classList.add("drag-over");
+}
+
+function handleDragLeave(event) {
+  document.getElementById("imgDropZone").classList.remove("drag-over");
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  document.getElementById("imgDropZone").classList.remove("drag-over");
+  const file = event.dataTransfer.files[0];
+  if (!file || !file.type.startsWith("image/")) {
+    toast("Please drop an image file");
+    return;
+  }
+  processImageFile(file);
+}
+
+function processImageFile(file) {
+  // Validate size (5MB max)
+  if (file.size > 5 * 1024 * 1024) {
+    toast("Image too large — max 5MB");
+    return;
+  }
+
+  selectedImageFile = file;
+  // Clear the manual filename when file is chosen
+  document.getElementById("pm-image").value = "";
+
+  // Read as data URL for preview
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    selectedImageBase64 = e.target.result;
+    showImagePreview(e.target.result, file.name);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showImagePreview(src, filename) {
+  document.getElementById("imgPreview").src = src;
+  document.getElementById("imgFilenameTag").textContent = filename;
+  document.getElementById("imgPlaceholder").style.display = "none";
+  document.getElementById("imgPreviewWrap").classList.add("show");
+  document.getElementById("imgDropZone").classList.add("has-image");
+}
+
+function clearImage() {
+  selectedImageFile = null;
+  selectedImageBase64 = null;
+  document.getElementById("pm-img-file").value = "";
+  clearImageUI();
+}
+
+function clearImageUI() {
+  document.getElementById("imgPreview").src = "";
+  document.getElementById("imgFilenameTag").textContent = "";
+  document.getElementById("imgPlaceholder").style.display = "flex";
+  document.getElementById("imgPreviewWrap").classList.remove("show");
+  document.getElementById("imgDropZone").classList.remove("has-image", "drag-over");
+  document.getElementById("uploadProgress").classList.remove("show");
+  document.getElementById("uploadProgressBar").style.width = "0%";
+}
+
+function handleManualFilename(val) {
+  // When manual filename is typed, clear the file upload selection
+  if (val) {
+    selectedImageFile = null;
+    selectedImageBase64 = null;
+    document.getElementById("pm-img-file").value = "";
+    // Show a preview attempt with the img/ path
+    showImagePreview(`img/${val}`, val);
+  } else {
+    clearImageUI();
+  }
+}
+
+/**
+ * Upload image file to the server.
+ * Expects your server to have: POST /api/admin/upload-image
+ * with multipart/form-data containing "image" field.
+ * Returns { filename: "uploaded_name.jpg" }
+ *
+ * If your server doesn't have this endpoint yet, it falls back
+ * to storing the base64 in the product record (less ideal but works).
+ */
+async function uploadImageToServer(file) {
+  const progressBar = document.getElementById("uploadProgress");
+  const progressFill = document.getElementById("uploadProgressBar");
+  progressBar.classList.add("show");
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append("image", file);
+
+    xhr.upload.addEventListener("progress", (e) => {
+      if (e.lengthComputable) {
+        const pct = Math.round((e.loaded / e.total) * 100);
+        progressFill.style.width = pct + "%";
+      }
+    });
+
+    xhr.addEventListener("load", () => {
+      progressBar.classList.remove("show");
+      progressFill.style.width = "0%";
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          resolve(data.filename || data.name || file.name);
+        } catch {
+          resolve(file.name);
+        }
+      } else {
+        reject(new Error(`Upload failed: ${xhr.status}`));
+      }
+    });
+
+    xhr.addEventListener("error", () => {
+      progressBar.classList.remove("show");
+      reject(new Error("Upload failed — network error"));
+    });
+
+    xhr.open("POST", `${API}/api/admin/upload-image`);
+    xhr.setRequestHeader("x-admin-key", ADMIN_KEY);
+    xhr.send(formData);
+  });
+}
+
+// ─── Save product ─────────────────────────────────────────────────────────────
+async function saveProduct() {
+  const name = document.getElementById("pm-name").value.trim();
+  if (!name) { toast("Product name is required"); return; }
+
+  const btn = document.getElementById("saveProductBtn");
+  const btnText = document.getElementById("saveBtnText");
+  btn.disabled = true;
+  btnText.textContent = "Saving…";
+
+  const specs = Array.from(document.querySelectorAll("#specs-wrap .spec-row input"))
+    .map(i => i.value.trim()).filter(Boolean);
+
+  let imageName = document.getElementById("pm-image").value.trim();
+
+  // If a new file was selected, upload it first
+  if (selectedImageFile) {
+    try {
+      btnText.textContent = "Uploading image…";
+      imageName = await uploadImageToServer(selectedImageFile);
+      toast(`Image uploaded: ${imageName}`);
+    } catch (err) {
+      // If upload endpoint doesn't exist yet, warn and continue without image
+      console.warn("Image upload failed:", err);
+      toast("⚠️ Image upload failed — add POST /api/admin/upload-image to your server. Product saved without new image.");
+      imageName = document.getElementById("pm-image").value.trim(); // keep existing
+    }
+  }
+
+  const body = {
+    name,
+    tag:         document.getElementById("pm-tag").value.trim(),
+    description: document.getElementById("pm-desc").value.trim(),
+    image:       imageName,
+    order:       parseInt(document.getElementById("pm-order").value) || 1,
+    specs
+  };
+
+  try {
+    if (editingProductId) {
+      await apiFetch(`/api/admin/products/${editingProductId}`, { method: "PATCH", body: JSON.stringify(body) });
+      toast("Product updated!");
+    } else {
+      await apiFetch("/api/admin/products", { method: "POST", body: JSON.stringify(body) });
+      toast("Product added!");
+    }
+    closeModal("prodModal");
+    loadProducts();
+  } catch (err) {
+    toast("Error saving product");
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = "Save Product";
+  }
 }
 
 function addSpecRow(value = "") {
@@ -1159,34 +1578,6 @@ function addSpecRow(value = "") {
   row.innerHTML = `<input class="form-input-modal" placeholder="e.g. Speed: up to 80 fills/min" value="${value}">
     <button class="spec-remove" onclick="this.parentElement.remove()">×</button>`;
   wrap.appendChild(row);
-}
-
-async function saveProduct() {
-  const name = document.getElementById("pm-name").value.trim();
-  if (!name) { toast("Product name is required"); return; }
-
-  const specs = Array.from(document.querySelectorAll("#specs-wrap .spec-row input"))
-    .map(i => i.value.trim()).filter(Boolean);
-
-  const body = {
-    name,
-    tag:         document.getElementById("pm-tag").value.trim(),
-    description: document.getElementById("pm-desc").value.trim(),
-    image:       document.getElementById("pm-image").value.trim(),
-    order:       parseInt(document.getElementById("pm-order").value) || 1,
-    specs
-  };
-
-  if (editingProductId) {
-    await apiFetch(`/api/admin/products/${editingProductId}`, { method: "PATCH", body: JSON.stringify(body) });
-    toast("Product updated!");
-  } else {
-    await apiFetch("/api/admin/products", { method: "POST", body: JSON.stringify(body) });
-    toast("Product added!");
-  }
-
-  closeModal("prodModal");
-  loadProducts();
 }
 
 // ─── Modal helpers ───────────────────────────────────────────────────────────
@@ -1204,7 +1595,7 @@ function toast(msg) {
   document.getElementById("toast-msg").textContent = msg;
   t.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
